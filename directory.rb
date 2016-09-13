@@ -25,9 +25,9 @@ end
 
 def print(student)
 index = 0
-letter = "a"
-student.each_with_index do |student, index|
-  if (student[:name].split "")[0].downcase == letter
+
+student.each_with_index do |student|
+  if (student[:name].split "").length < 12
     puts "#{student[:name]} (#{student[:cohort]} cohort)"
    end
 end
