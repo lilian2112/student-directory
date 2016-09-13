@@ -23,12 +23,18 @@ def print_header
   puts "-------------"
 end
 
-def print(students)
+def print(student)
 index = 0
-students.each_with_index do |student, index|
-  puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+letter = "a"
+student.each_with_index do |student, index|
+  if (student[:name].split "")[0].downcase == letter
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+   end
 end
 end
+
+
+
 # finally, we print the total number of students
 def print_footer(students)
 puts "Overall, we have #{students.count} great students"
