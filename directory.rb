@@ -23,16 +23,17 @@ def print_header
   puts "-------------"
 end
 
-def print(student)
-index = 0
-
-student.each_with_index do |student|
-  if (student[:name].split "").length < 12
-    puts "#{student[:name]} (#{student[:cohort]} cohort)"
-   end
+def print(students)
+  index = 0
+  n = students.length
+  students.each do |student|
+  while index != n do
+  student = students[index]
+     puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  index += 1
 end
 end
-
+end
 
 
 # finally, we print the total number of students
