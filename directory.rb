@@ -4,7 +4,7 @@ def input_students
   while true do
     new_hash = {}
     puts "Please enter the names of a student, to finish, just hit return twice"
-    name = gets.chomp
+    name = gets.delete "\n"
       if name == ''
         break
       end
@@ -50,7 +50,7 @@ end
 end
 
 =begin
-this is an alternative sort method. but it only sorts cohorts alphabetically 
+this is an alternative sort method. but it only sorts cohorts alphabetically
 def print(students)
   new_students = students.sort_by{|c| c[:cohort]}
   index = 0
@@ -80,6 +80,5 @@ end
 
 students = input_students
 print_header
-print(students)
 print_footer(students)
 print_by_cohort(students)
