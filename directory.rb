@@ -1,6 +1,6 @@
 def input_students
   students = []
-  additional_info = [:hobbies, :country_of_birth, :height, :relationship_status]
+  additional_info = [:hobbies, :country_of_birth, :height]
   while true do
     new_hash = {}
     puts "Please enter the names of a student, to finish, just hit return twice"
@@ -38,22 +38,43 @@ def print_header
   puts "-------------"
 end
 
+def print_by_cohort(students)
+  group_cohort = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october,:november, :december]
+  group_cohort.each do |cohort|
+    students.each do |student|
+      if student[:cohort] == cohort
+        puts "#{student[:name].center(12)} (#{student[:cohort]} cohort), their hobby is #{student[:hobbies]}, they were born in #{student[:country_of_birth]}, and they are #{student[:heigth]}cm tall"
+end
+end
+end
+end
+
+=begin
+this is an alternative sort method. but it only sorts cohorts alphabetically 
 def print(students)
+  new_students = students.sort_by{|c| c[:cohort]}
   index = 0
-  n = students.length
-  students.each do |student|
+  n = new_students.length
+  new_students.each do |student|
   while index != n do
-  student = students[index]
+  student = new_students[index]
      puts "#{student[:name].center(12)} (#{student[:cohort]} cohort), their hobby is #{student[:hobbies]}, they were born in #{student[:country_of_birth]}, and they are #{student[:heigth]}cm tall."
   index += 1
 end
 end
 end
+=end
 
 
 # finally, we print the total number of students
 def print_footer(students)
-puts "Overall, we have #{students.count} great students"
+  if students.count == 0
+    puts "We currently have no students"
+  elsif students.count <= 2
+   puts "Overall, we have #{students.count} great student"
+  else
+   puts "Overall, we have #{students.count} great students"
+ end
 end
 
 
@@ -61,3 +82,4 @@ students = input_students
 print_header
 print(students)
 print_footer(students)
+print_by_cohort(students)
