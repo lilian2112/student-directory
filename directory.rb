@@ -1,5 +1,39 @@
+def interactive_menu
+@students = []
+loop do
+  print_menu
+  process(gets.chomp)
+end
+end
+
+def process(selection )
+  case selection
+  when "1"
+    input_students
+  when "2"
+    show_students
+  when "9"
+    exit # this will cause the program to terminate
+  else
+    puts "I don't know what you meant, try again"
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print_by_cohort
+  print_footer
+end
+
+
+
 def input_students
-  students = []
   additional_info = [:hobbies, :country_of_birth, :height]
   while true do
     new_hash = {}
@@ -11,13 +45,13 @@ def input_students
       puts "Please enter the cohort of that student"
       cohort = gets.chomp.to_s
       if cohort == '' or nil
-        cohort = "September"
+        cohort = "september"
       elsif ["january", "feburary", "march", "april", "may", "june", "july", "august", "september", "november", "december"].include? (cohort.downcase)
       else
         puts "Please enter a valid cohort, spell out the month, otherwise it will default to september"
         cohort = gets.chomp
         unless ["january", "feburary", "march", "april", "may", "june", "july", "august", "september", "november", "december"].include? (cohort.downcase)
-         cohort = "September"
+         cohort = "september"
        end
       end
         new_hash[:name] = name
@@ -27,9 +61,9 @@ def input_students
           information = gets.chomp
           new_hash[info] = information
       end
-      students << new_hash
+      @students << new_hash
   end
-  students
+  @students
 end
 
 
@@ -38,10 +72,10 @@ def print_header
   puts "-------------"
 end
 
-def print_by_cohort(students)
+def print_by_cohort
   group_cohort = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october,:november, :december]
   group_cohort.each do |cohort|
-    students.each do |student|
+    @students.each do |student|
       if student[:cohort] == cohort
         puts "#{student[:name].center(12)} (#{student[:cohort]} cohort), their hobby is #{student[:hobbies]}, they were born in #{student[:country_of_birth]}, and they are #{student[:heigth]}cm tall"
 end
@@ -67,18 +101,15 @@ end
 
 
 # finally, we print the total number of students
-def print_footer(students)
-  if students.count == 0
+def print_footer
+  if @students.count == 0
     puts "We currently have no students"
-  elsif students.count <= 2
-   puts "Overall, we have #{students.count} great student"
+  elsif @students.count <= 2
+   puts "Overall, we have #{@students.count} great student"
   else
-   puts "Overall, we have #{students.count} great students"
+   puts "Overall, we have #{@students.count} great students"
  end
 end
 
 
-students = input_students
-print_header
-print_footer(students)
-print_by_cohort(students)
+interactive_menu
