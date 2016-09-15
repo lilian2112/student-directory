@@ -6,7 +6,7 @@ loop do
 end
 end
 
-def process(selection )
+def process(selection)
   case selection
   when "1"
     input_students
@@ -14,6 +14,8 @@ def process(selection )
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit # this will cause the program to terminate
   else
@@ -24,7 +26,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list of sudents.csv"
+  puts "3. Save the list of students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 
@@ -81,6 +84,16 @@ def save_students
 end
 
 
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+  name, cohort = line.chomp.split(',')
+    @students << {name: name, cohort: cohort.to_sym}
+  end
+  file.close
+end
+
+
 def print_header
   puts "The students of Villain Academy"
   puts "-------------"
@@ -91,7 +104,7 @@ def print_by_cohort
   group_cohort.each do |cohort|
     @students.each do |student|
       if student[:cohort] == cohort
-        puts "#{student[:name].center(12)}, (#{student[:cohort]} cohort), their hobby is #{student[:hobbies]}, they were born in #{student[:country_of_birth]}, and they are #{student[:heigth]}cm tall"
+        puts "#{student[:name].center(12)}, (#{student[:cohort]} cohort)"
 end
 end
 end
@@ -101,9 +114,9 @@ end
 
 # finally, we print the total number of students
 def print_footer
-  if @students.count == 0
+  if @students = []
     puts "We currently have no students"
-  elsif @students.count <= 1
+  elsif @students.count == 1
    puts "Overall, we have #{@students.count} great student"
   else
    puts "Overall, we have #{@students.count} great students"
