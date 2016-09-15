@@ -3,8 +3,8 @@
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list of students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list of a file"
+  puts "4. Load the list from a file"
   puts "9. Exit"
 end
 
@@ -22,8 +22,10 @@ def process(selection)
   when "2"
     show_students
   when "3"
+    ask_file
     save_students
   when "4"
+    ask_file
     load_students
   when "9"
     exit # this will cause the program to terminate
@@ -83,6 +85,14 @@ def try_load_students
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
+  end
+end
+
+def ask_file
+  puts "please specify a filename, or hit return to use the default"
+  file = STDIN.gets.chomp
+  if file.empty?
+    file = @File
   end
 end
 
