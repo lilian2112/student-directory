@@ -44,8 +44,10 @@ def input_students
     end
   end
 
-def add_info hash
-    @students << hash
+def show_students
+  print_header
+  print_student_list
+  print_footer
 end
 
 def load_students(filename = "students.csv")
@@ -55,41 +57,38 @@ def load_students(filename = "students.csv")
     hash = {name: name, cohort: cohort.to_sym}
     add_info(hash)
     end
+    puts "Students have been loaded successfully"
     file.close
 end
 
-def show_students
-  print_header
-  print_student_list
-  print_footer
-end
-
 def save_students
-  #open file for writing
   file = File.open("students.csv", "w")
-  # itterate over array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
+  puts "Students have been saved successfully"
   file.close
 end
 
 def try_load_students
-  filename = ARGV.first # first argument from the command line
+  filename = ARGV.first
   if filename.nil?
      filename = "students.csv"
-   end # get out of the method if it isn't given
-  if File.exists?(filename) # if it exists
+   end
+  if File.exists?(filename)
     load_students(filename)
      puts "Loaded #{@students.count} from #{filename}"
-  else # if it doesn't exist
+  else
     puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
+    exit
   end
 end
 
+def add_info hash
+    @students << hash
+end
 
 
 def print_header
@@ -104,13 +103,11 @@ def print_student_list
 end
 
 
-
-# finally, we print the total number of students
 def print_footer
   if @students == []
     puts "We currently have no students"
   elsif @students.count == 1
-   puts "Overall, we have #{@students.count} great student"
+   puts "Overall, we have 1 great student"
   else
    puts "Overall, we have #{@students.count} great students"
  end
