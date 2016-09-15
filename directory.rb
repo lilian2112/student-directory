@@ -33,41 +33,34 @@ def process(selection)
 end
 
 def input_students
-  additional_info = [:hobbies, :country_of_birth, :height]
-  while true do
-    new_hash = {}
-    puts "Please enter the names of a student, to finish, just hit return again"
-    name = STDIN.gets.delete "\n"
-      if name == ''
-        break
-      end
-      puts "Please enter the cohort of that student"
-      cohort = STDIN.gets.chomp.to_s
-      if cohort == '' or nil
-        cohort = "september"
-      elsif ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"].include? (cohort.downcase)
-      else
-        puts "Please enter a valid cohort, spell out the month, otherwise it will default to september"
-        cohort = STDIN.gets.chomp
-        unless ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"].include? (cohort.downcase)
-         cohort = "september"
-       end
-      end
-        new_hash[:name] = name
-        new_hash[:cohort] = cohort.to_sym
-        additional_info.each do |info|
-          puts "Please enter #{info.to_s} for #{name}."
-          information = gets.chomp
-          new_hash[info] = information
-      end
-      @students << new_hash
+  puts "Please enter the names of the students"
+    puts "To finish, just hit return twice"
+    name = STDIN.gets.chomp
+    while !name.empty? do
+      hash = {name: name, cohort: :november}
+      add_info(hash)
+      puts "Now we have #{@students.count} students"
+      name = STDIN.gets.chomp
+    end
   end
-  @students
+
+def add_info hash
+    @students << hash
+end
+
+def load_students(filename = "students.csv")
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+    name, cohort = line.chomp.split(',')
+    hash = {name: name, cohort: cohort.to_sym}
+    add_info(hash)
+    end
+    file.close
 end
 
 def show_students
   print_header
-  print_by_cohort
+  print_student_list
   print_footer
 end
 
@@ -95,14 +88,6 @@ def try_load_students
   end
 end
 
-def load_students (filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
-  end
-  file.close
-end
 
 
 def print_header
@@ -110,15 +95,10 @@ def print_header
   puts "-------------"
 end
 
-def print_by_cohort
-  group_cohort = [:january, :february, :march, :april, :may, :june, :july, :august, :september, :october,:november, :december]
-  group_cohort.each do |cohort|
-    @students.each do |student|
-      if student[:cohort] == cohort
-        puts "#{student[:name].center(12)}, (#{student[:cohort]} cohort)"
-end
-end
-end
+def print_student_list
+  @students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  end
 end
 
 
