@@ -1,8 +1,17 @@
-def interactive_menu
 @students = []
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "3. Save the list of students.csv"
+  puts "4. Load the list from students.csv"
+  puts "9. Exit"
+end
+
+def interactive_menu
 loop do
   print_menu
-  process(gets.chomp)
+  process(STDIN.gets.chomp)
 end
 end
 
@@ -23,38 +32,23 @@ def process(selection)
   end
 end
 
-def print_menu
-  puts "1. Input the students"
-  puts "2. Show the students"
-  puts "3. Save the list of students.csv"
-  puts "4. Load the list from students.csv"
-  puts "9. Exit"
-end
-
-def show_students
-  print_header
-  print_by_cohort
-  print_footer
-end
-
-
 def input_students
   additional_info = [:hobbies, :country_of_birth, :height]
   while true do
     new_hash = {}
     puts "Please enter the names of a student, to finish, just hit return again"
-    name = gets.delete "\n"
+    name = STDIN.gets.delete "\n"
       if name == ''
         break
       end
       puts "Please enter the cohort of that student"
-      cohort = gets.chomp.to_s
+      cohort = STDIN.gets.chomp.to_s
       if cohort == '' or nil
         cohort = "september"
       elsif ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"].include? (cohort.downcase)
       else
         puts "Please enter a valid cohort, spell out the month, otherwise it will default to september"
-        cohort = gets.chomp
+        cohort = STDIN.gets.chomp
         unless ["january", "february", "march", "april", "may", "june", "july", "august", "september", "november", "december"].include? (cohort.downcase)
          cohort = "september"
        end
@@ -71,6 +65,12 @@ def input_students
   @students
 end
 
+def show_students
+  print_header
+  print_by_cohort
+  print_footer
+end
+
 def save_students
   #open file for writing
   file = File.open("students.csv", "w")
@@ -83,9 +83,20 @@ def save_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students (filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym}
@@ -114,7 +125,7 @@ end
 
 # finally, we print the total number of students
 def print_footer
-  if @students = []
+  if @students == []
     puts "We currently have no students"
   elsif @students.count == 1
    puts "Overall, we have #{@students.count} great student"
@@ -123,5 +134,5 @@ def print_footer
  end
 end
 
-
+try_load_students
 interactive_menu
